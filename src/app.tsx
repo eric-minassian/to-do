@@ -1,18 +1,28 @@
 import { MetaProvider, Title } from "@solidjs/meta";
 import { Router } from "@solidjs/router";
 import { FileRoutes } from "@solidjs/start/router";
-import { Suspense } from "solid-js";
+import { createSignal } from "solid-js";
 import "./app.css";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 
 export default function App() {
+  const [isSidebarOpen, setIsSidebarOpen] = createSignal(false);
+
   return (
     <Router
-      root={props => (
+      root={(props) => (
         <MetaProvider>
           <Title>SolidStart - Basic</Title>
-          <a href="/">Index</a>
-          <a href="/about">About</a>
-          <Suspense>{props.children}</Suspense>
+          <div class="min-h-screen">
+            <Navbar />
+            <Sidebar
+              isOpen={isSidebarOpen()}
+              onToggle={() => setIsSidebarOpen(!isSidebarOpen())}
+              onClose={() => setIsSidebarOpen(false)}
+            />
+            <main class="p-4">{props.children}</main>
+          </div>
         </MetaProvider>
       )}
     >
